@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Academic Copilot</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>AI Academic Writing Copilot</h1>
+        
+        <label for="topic">Enter Research Topic:</label>
+        <textarea id="topic" placeholder="Type your research topic here..."></textarea>
+        
+        <button id="generate">Generate Outline</button>
+        
+        <div id="output" placeholder="Generated outline will appear here..."></div>
+        
+        <footer>
+            <p>Created by <a href="#" target="_blank">Your Name</a>. Powered by GPT-J.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('generate').addEventListener('click', async () => {
+            const topic = document.getElementById('topic').value;
+            const output = document.getElementById('output');
+            output.textContent = "Generating outline...";
+
+            try {
+                const response = await fetch('http://localhost:3000/generate-outline', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ topic })
+                });
+                const data = await response.json();
+                if (data.outline) {
+                    output.textContent = data.outline;
+                } else {
+                    output.textContent = "Error generating outline.";
+                }
+            } catch (error) {
+                console.error(error);
+                output.textContent = "Error connecting to server.";
+            }
+        });
+    </script>
+</body>
+</html>
